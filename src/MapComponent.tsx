@@ -83,6 +83,7 @@ class MapComponent extends Component<MapComponentProps, MapComponentState> {
     loadPlacemarks: true,
     showSearchControl: true,
     showFloorsControl: true,
+    rotateMap: false,
     shouldMapPanZoom: () => true,
     width: "100%",
     height: "400px",
@@ -509,12 +510,23 @@ class MapComponent extends Component<MapComponentProps, MapComponentState> {
 
   addZoomBehavior() {
     if (this.mapRef.current) {
+      const PADDING = 400;
+      const mapData = this.getMapData();
+      const bottomRightX = mapData?.width + PADDING;
+      const bottomRightY = mapData?.height + PADDING;
+
       const onZoom = () => {
         if (!this.mapRef.current) {
           return;
         }
-        const { k, x, y } = d3ZoomTransform(this.mapRef.current);
-        const t = `translate(${x}px, ${y}px) scale(${k})`;
+        const { x, y, k } = d3ZoomTransform(this.mapRef.current);
+        let t;
+        if (this.props.rotateMap) {
+          t = `translate(${x}px, ${y}px) rotate(90deg) scale(${k})`;
+        } else {
+          t = `translate(${x}px, ${y}px) scale(${k})`;
+        }
+
         this.setState({
           mapTransform: t,
           mapZoomFactor: k,
@@ -535,6 +547,17 @@ class MapComponent extends Component<MapComponentProps, MapComponentState> {
         )
         // min/max zoom levels
         .scaleExtent([1 / 60, 14])
+        .translateExtent(
+          this.props.rotateMap
+            ? [
+                [-bottomRightY, -PADDING],
+                [PADDING, bottomRightX],
+              ]
+            : [
+                [-PADDING, -PADDING],
+                [bottomRightX, bottomRightY],
+              ]
+        )
         .duration(ZOOM_DURATION)
         .on("zoom", onZoom)
         .on("end.zoom", onZoomEnd);
@@ -546,9 +569,8 @@ class MapComponent extends Component<MapComponentProps, MapComponentState> {
   zoomToDefault() {
     const mapData = this.getMapData();
     const mapContainerSize = this.getMapRefSize();
-    const mapWidth = mapData?.width;
-    const mapHeight = mapData?.height;
-    this.mapContainerSize = mapContainerSize;
+    const mapWidth = this.props.rotateMap ? mapData?.height : mapData?.width;
+    const mapHeight = this.props.rotateMap ? mapData?.width : mapData?.height;
 
     if (mapWidth && mapHeight && this.mapSelection && this.zoomD3) {
       this.mapSelection.call(
@@ -856,6 +878,7 @@ class MapComponent extends Component<MapComponentProps, MapComponentState> {
                     placemarkOptions={placemarks}
                     onPlacemarkClick={this.onPlacemarkClick}
                     onUpdate={onPlacemarksUpdate}
+                    rotate={this.props.rotateMap}
                     toggleLoadingSpinner={this.toggleLoadingSpinner}
                     onInit={() => {
                       this.onPlacemarksInit();
@@ -882,6 +905,7 @@ class MapComponent extends Component<MapComponentProps, MapComponentState> {
                 <AnnotationLayer
                   mapZoomFactor={mapZoomFactor}
                   annotations={annotations}
+                  rotate={this.props.rotateMap}
                 />
               </Fragment>
             ) : null}

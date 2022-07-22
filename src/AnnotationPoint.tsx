@@ -12,6 +12,7 @@ import { asyncClientCall } from "./util";
 
 interface AnnotationPointProps extends CustomAnnotationPoint {
   mapZoomFactor: number;
+  rotate?: boolean;
 }
 
 const AnnotationPoint: FunctionComponent<AnnotationPointProps> = ({
@@ -25,7 +26,43 @@ const AnnotationPoint: FunctionComponent<AnnotationPointProps> = ({
   title,
   onClick,
   data = {},
+  rotate,
 }) => {
+  const cssAnnotationPoint = css({
+    label: "AnnotationPoint",
+    position: "absolute",
+    top: "var(--meridian-annotationPoint-y)",
+    left: "var(--meridian-annotationPoint-x)",
+    transform: rotate
+      ? "translate(-50%, -50%) rotate(-90deg) scale(var(--meridian-annotationPoint-scale))"
+      : "translate(-50%, -50%) scale(var(--meridian-annotationPoint-scale))",
+    width: "var(--meridian-annotationPoint-size)",
+    height: "var(--meridian-annotationPoint-size)",
+    backgroundColor: "var(--meridian-annotationPoint-backgroundColor)",
+    backgroundImage: "var(--meridian-annotationPoint-backgroundImage)",
+    backgroundSize: "var(--meridian-annotationPoint-backgroundSize)",
+    backgroundRepeat: "no-repeat",
+    backgroundPosition: "center",
+    borderRadius: 9999,
+    userSelect: "none",
+  });
+
+  const cssAnnotationPointLabel = css(mixins.textStrokeWhite, {
+    label: "AnnotationPoint-Label",
+    marginLeft: "50%",
+    position: "absolute",
+    minWidth: 55,
+    maxWidth: 120,
+    fontSize: 14,
+    textAlign: "center",
+    marginTop: "var(--meridian-annotationPoint-size)",
+    paddingTop: 4,
+    color: "#222",
+    userSelect: "none",
+    transform: "translate(-50%, 0)",
+    fontWeight: "bold",
+  });
+
   return (
     <div
       className={cssAnnotationPoint}
@@ -55,40 +92,6 @@ const AnnotationPoint: FunctionComponent<AnnotationPointProps> = ({
     </div>
   );
 };
-
-const cssAnnotationPoint = css({
-  label: "AnnotationPoint",
-  position: "absolute",
-  top: "var(--meridian-annotationPoint-y)",
-  left: "var(--meridian-annotationPoint-x)",
-  transform:
-    "translate(-50%, -50%) scale(var(--meridian-annotationPoint-scale))",
-  width: "var(--meridian-annotationPoint-size)",
-  height: "var(--meridian-annotationPoint-size)",
-  backgroundColor: "var(--meridian-annotationPoint-backgroundColor)",
-  backgroundImage: "var(--meridian-annotationPoint-backgroundImage)",
-  backgroundSize: "var(--meridian-annotationPoint-backgroundSize)",
-  backgroundRepeat: "no-repeat",
-  backgroundPosition: "center",
-  borderRadius: 9999,
-  userSelect: "none",
-});
-
-const cssAnnotationPointLabel = css(mixins.textStrokeWhite, {
-  label: "AnnotationPoint-Label",
-  marginLeft: "50%",
-  position: "absolute",
-  minWidth: 55,
-  maxWidth: 120,
-  fontSize: 14,
-  textAlign: "center",
-  marginTop: "var(--meridian-annotationPoint-size)",
-  paddingTop: 4,
-  color: "#222",
-  userSelect: "none",
-  transform: "translate(-50%, 0)",
-  fontWeight: "bold",
-});
 
 AnnotationPoint.displayName = "AnnotationPoint";
 

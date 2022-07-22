@@ -21,6 +21,7 @@ export interface PlacemarkLayerProps {
   placemarkOptions: CreateMapOptions["placemarks"];
   onPlacemarkClick: (placemark: PlacemarkData) => void;
   onUpdate: MapComponentProps["onPlacemarksUpdate"];
+  rotate?: boolean;
   toggleLoadingSpinner: (options: { show: boolean; source: string }) => void;
   onInit: () => void;
 }
@@ -131,6 +132,7 @@ export default class PlacemarkLayer extends Component<PlacemarkLayerProps> {
             disabled={this.props.placemarkOptions?.disabled}
             labelMode={this.props.placemarkOptions?.labelMode ?? "zoom"}
             labelZoomLevel={this.props.placemarkOptions?.labelZoomLevel}
+            rotate={this.props.rotate}
           />
         ))}
       </div>

@@ -23,6 +23,7 @@ interface TagProps {
   mapZoomFactor: number;
   onClick?: (tag: TagData) => void;
   disabled?: boolean;
+  rotate?: boolean;
 }
 
 const Tag: FunctionComponent<TagProps> = ({
@@ -31,6 +32,7 @@ const Tag: FunctionComponent<TagProps> = ({
   mapZoomFactor,
   onClick = () => {},
   disabled = false,
+  rotate,
 }) => {
   const shrinkFactor = mapZoomFactor < SHRINK_POINT ? SHRINK_FACTOR : 1;
   const k = 1 / mapZoomFactor / shrinkFactor;
@@ -60,7 +62,9 @@ const Tag: FunctionComponent<TagProps> = ({
       style={{
         left: data.x,
         top: data.y,
-        transform: `translate(-50%, -50%) scale(${k})`,
+        transform: rotate
+          ? `translate(-50%, -50%) rotate(-90deg) scale(${k})`
+          : `translate(-50%, -50%) scale(${k})`,
       }}
       onClick={(event) => {
         if (event.target instanceof HTMLElement) {

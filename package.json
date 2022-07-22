@@ -1,5 +1,5 @@
 {
-  "name": "@meridian/web-sdk",
+  "name": "@lab3dvlp/meridian-web-sdk",
   "private": false,
   "version": "1.6.1",
   "description": "Web SDK for showing Aruba Meridian maps, tags, and more",

@@ -28,6 +28,7 @@ export interface TagLayerProps {
   onTagClick: (tag: TagData) => void;
   onUpdate: MapComponentProps["onTagsUpdate"];
   toggleLoadingSpinner: (options: { show: boolean; source: string }) => void;
+  rotate?: boolean;
   onInit: () => void;
 }
 
@@ -214,6 +215,7 @@ export default class TagLayer extends Component<TagLayerProps, TagLayerState> {
               data={tag}
               onClick={onTagClick}
               disabled={tagOptions.disabled}
+              rotate={this.props.rotate}
             />
           ))}
       </div>

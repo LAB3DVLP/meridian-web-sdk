@@ -24,6 +24,7 @@ interface PlacemarkProps {
   disabled?: boolean;
   labelMode: CreateMapPlacemarksOptions["labelMode"];
   labelZoomLevel: CreateMapPlacemarksOptions["labelZoomLevel"];
+  rotate?: boolean;
 }
 
 const Placemark: FunctionComponent<PlacemarkProps> = ({
@@ -34,6 +35,7 @@ const Placemark: FunctionComponent<PlacemarkProps> = ({
   disabled = false,
   labelMode,
   labelZoomLevel = 0.2,
+  rotate,
 }) => {
   const cssTypeName = `meridian-placemark-type-${data.type}`;
   const labelOnly = !data.type || data.type.indexOf("label_") === 0;
@@ -52,7 +54,9 @@ const Placemark: FunctionComponent<PlacemarkProps> = ({
   const style = {
     left: data.x,
     top: data.y,
-    transform: `translate(-50%, -50%) scale(${k})`,
+    transform: rotate
+      ? `translate(-50%, -50%) rotate(-90deg) scale(${k})`
+      : `translate(-50%, -50%) scale(${k})`,
   } as const;
 
   if (labelOnly) {

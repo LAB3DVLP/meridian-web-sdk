@@ -425,6 +425,8 @@ export interface CreateMapOptions {
   showFloorsControl?: boolean;
   /** Should we show the Search UI control? Defaults to true. */
   showSearchControl?: boolean;
+  /** Should we rotate the map? Defaults to false. */
+  rotateMap?: boolean;
   /** Set to false to disable loading tags (default: true) */
   loadTags?: boolean;
   /** Options related to tags. */

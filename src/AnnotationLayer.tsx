@@ -12,11 +12,13 @@ import { CustomAnnotation } from "./web-sdk";
 interface AnnotationLayerProps {
   mapZoomFactor: number;
   annotations: CustomAnnotation[];
+  rotate?: boolean;
 }
 
 const AnnotationLayer: FunctionComponent<AnnotationLayerProps> = ({
   mapZoomFactor,
   annotations,
+  rotate,
 }) => {
   return (
     <div data-testid="meridian--private--annotation-layer">
@@ -24,7 +26,12 @@ const AnnotationLayer: FunctionComponent<AnnotationLayerProps> = ({
         switch (obj.type) {
           case "point":
             return (
-              <AnnotationPoint key={i} {...obj} mapZoomFactor={mapZoomFactor} />
+              <AnnotationPoint
+                key={i}
+                {...obj}
+                mapZoomFactor={mapZoomFactor}
+                rotate={rotate}
+              />
             );
           default:
             return null;
